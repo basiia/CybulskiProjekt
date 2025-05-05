@@ -1,28 +1,24 @@
+</main>
 <footer>
-    <p>&copy; 2025 Karpol</p>
+    <div class="footer-top">
+        <div>
+            <strong>Nazwa!</strong><br>
+            Adres Warszawa, ul. Warszawska 1<br>
+            📞 +48 555 555 555<br>
+            ✉ kontakt@example.com
+        </div>
+        <div>
+            <p>Pomagamy znaleźć samochód dopasowany do Twoich potrzeb</p>
+            <a href="#">Polityka prywatności</a> |
+            <a href="#">Regulamin</a>
+            <div style="margin-top: 10px;">
+                <a href="#"><img src="yt.svg" alt="YT" height="16"></a>
+                <a href="#"><img src="fb.svg" alt="FB" height="16"></a>
+                <a href="#"><img src="insta.svg" alt="Insta" height="16"></a>
+            </div>
+        </div>
+    </div>
+    <p style="margin-top: 20px;">&copy; <?php echo date("Y"); ?></p>
 </footer>
-
-<style>
-    /* Flexbox dla całej strony */
-    body {
-        display: flex;
-        flex-direction: column;
-        min-height: 100vh;
-        margin: 0;
-        padding: 0;
-    }
-
-    .container {
-        flex-grow: 1; /* Kontener rośnie, by wypełnić dostępną przestrzeń */
-    }
-
-    footer {
-        background-color: #333;
-        color: white;
-        padding: 10px;
-        text-align: center;
-        width: 100%;
-        box-sizing: border-box; /* Zlicza padding do szerokości */
-        position: relative;
-    }
-</style>
+</body>
+</html>
