@@ -2,7 +2,7 @@
 <footer>
     <div class="footer-top">
         <div>
-            <strong>Nazwa!</strong><br>
+            <strong>Karpol</strong><br>
             Adres Warszawa, ul. Warszawska 1<br>
             📞 +48 555 555 555<br>
             ✉ kontakt@example.com

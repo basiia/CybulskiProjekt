@@ -1,7 +1,7 @@
 <?php
 session_start();
 ?>
-    <<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
@@ -37,9 +37,27 @@ session_start();
 </head>
 <body>
 <header>
-    <div class="logo">Karpol</div>
+    <div class="logo">
+        <a href="index.php" style="text-decoration: none; color: inherit;">Karpol</a>
+    </div>
     <div class="auth-links">
-        <a href="login.php">Zaloguj się</a> | <a href="register.php">Zarejestruj się</a>
+        <?php
+        if (isset($_SESSION['id_user'])) {
+            echo "<span>Zalogowano jako: <strong>{$_SESSION['imie']}</strong> ({$_SESSION['rola']})</span> ";
+
+            if ($_SESSION['rola'] === 'Admin' || $_SESSION['rola'] === 'Pracownik') {
+                echo "<a href='./admin_panel.php'>Panel pracownika</a> | ";
+            } elseif ($_SESSION['rola'] === 'Klient') {
+                echo "<a href='./moje_rezerwacje.php'>Moje rezerwacje</a> | ";
+            }
+
+            echo "<a href='./logout.php'>Wyloguj</a>";
+        } else {
+            echo "<a href='./login.php'>Zaloguj się</a> | <a href='./rejestracja.php'>Zarejestruj</a>";
+        }
+        ?>
     </div>
 </header>
+
+
 <main>
