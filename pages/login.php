@@ -1,7 +1,9 @@
 <?php
 session_start();
 include '../includes/db.php';
+include '../includes/header.php';
 
+// Obsługa logowania
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $haslo = $_POST['haslo'];
@@ -16,88 +18,64 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION['id_user'] = $user['id_user'];
         $_SESSION['imie'] = $user['imie'];
         $_SESSION['rola'] = $user['rola'];
-
-        echo "<p>Zalogowano jako {$user['imie']} ({$user['rola']})</p>";
-        echo "<a href='./index.php'>Przejdź do strony głównej</a>";
+        header("Location: index.php");
+        exit;
     } else {
-        echo "<p style='color:red;'>Błędny e-mail lub hasło.</p>";
+        $error = "Błędny e-mail lub hasło.";
     }
 }
-
-if ($_SERVER["REQUEST_METHOD"] != "POST" || !isset($user) || !$user) {
 ?>
-<!DOCTYPE html>
-<html lang="pl">
-<head>
-    <meta charset="UTF-8">
-    <title>Logowanie - Karpol</title>
-    <style>
-        body {
+
+<style>
+body {
     margin: 0;
     font-family: Arial, sans-serif;
     background-color: #f6f6f6;
 }
 
 .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    background-color: white;
-    max-width: 480px;
-    margin: auto;
+    max-width: 420px;
+    margin: 100px auto 60px;
+    background: white;
     padding: 40px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
-}
-
-.logo {
-    font-size: 24px;
-    font-weight: bold;
-    align-self: flex-start;
-    margin-bottom: 40px;
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.05);
 }
 
 h2 {
-    font-size: 32px;
+    font-size: 28px;
+    text-align: center;
     margin-bottom: 30px;
-}
-
-label {
-    font-size: 16px;
-    margin-top: 20px;
-    margin-bottom: 5px;
-    display: block;
-    color: #555;
 }
 
 input[type="email"],
 input[type="password"] {
     width: 100%;
     padding: 14px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
     font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    margin-bottom: 16px;
     box-sizing: border-box;
 }
 
-.forgot-password {
-    margin-top: 10px;
+.forgot {
     font-size: 14px;
     color: #003087;
     text-decoration: none;
     display: block;
+    margin-bottom: 20px;
 }
 
 button {
-    margin-top: 30px;
     width: 100%;
     padding: 14px;
-    background-color: #d80000;
+    font-size: 16px;
+    background: #d80000;
     color: white;
     border: none;
     border-radius: 8px;
-    font-size: 18px;
     font-weight: bold;
     cursor: pointer;
 }
@@ -105,30 +83,36 @@ button {
 .register {
     margin-top: 20px;
     font-size: 16px;
-    color: #003087;
     text-align: center;
-    text-decoration: none;
 }
 
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="logo">Karpol</div>
-        <h2>Zaloguj się do konta</h2>
-        <form method="POST">
-            <label for="email">Email</label>
-            <input type="email" name="email" required>
+.register a {
+    color: #003087;
+    text-decoration: none;
+    font-weight: bold;
+}
 
-            <label for="haslo">Hasło</label>
-            <input type="password" name="haslo" required>
+.error {
+    color: red;
+    text-align: center;
+    margin-bottom: 16px;
+}
+</style>
 
-            <a class="forgot-password" href="#">Nie pamiętasz hasła?</a>
+<div class="container">
+    <h2>Zaloguj się do konta</h2>
 
-            <button type="submit">Zaloguj się</button>
-        </form>
-        <a class="register" href="rejestracja.php">Zarejestruj się</a>
+    <?php if (!empty($error)) echo "<div class='error'>$error</div>"; ?>
+
+    <form method="POST">
+        <input type="email" name="email" placeholder="Email" required>
+        <input type="password" name="haslo" placeholder="Hasło" required>
+        <a class="forgot" href="#">Nie pamiętasz hasła?</a>
+        <button type="submit">Zaloguj się</button>
+    </form>
+
+    <div class="register">
+        <a href="rejestracja.php">Zarejestruj się</a>
     </div>
-</body>
-</html>
-<?php } ?>
+</div>
+

@@ -4,200 +4,175 @@ include '../includes/db.php';
 
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
-    $sql = "SELECT * FROM Pojazdy WHERE id_pojazdu = :id";
-    $stmt = $pdo->prepare($sql);
+    $stmt = $pdo->prepare("SELECT * FROM Pojazdy WHERE id_pojazdu = :id");
     $stmt->bindParam(':id', $id);
     $stmt->execute();
     $pojazd = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if ($pojazd) {
-        echo "<div class='vehicle-details'>";
-        echo "<h1>" . $pojazd['marka'] . " " . $pojazd['model'] . "</h1>";
-        echo "<div class='vehicle-summary'>";
-        echo "<div class='vehicle-image'>";
-        echo "<img src='../assets/car_place.png' alt='Zdjęcie pojazdu'>";
-        echo "</div>";
-        echo "<div class='vehicle-info'>";
-        echo "<p><strong>Rok produkcji:</strong> " . $pojazd['rok_produkcji'] . "</p>";
-        echo "<p><strong>Przebieg:</strong> " . number_format($pojazd['przebieg'], 0, ',', '.') . " km</p>";
-        echo "<p><strong>Cena:</strong> " . number_format($pojazd['cena'], 2, ',', '.') . " PLN</p>";
-        echo "<p><strong>Rodzaj paliwa:</strong> " . $pojazd['rodzaj_paliwa'] . "</p>";
-        echo "<p><strong>Typ pojazdu:</strong> " . $pojazd['typ_pojazdu'] . "</p>";
-        echo "</div>";
-        echo "</div>"; // .vehicle-summary
-        
-        echo "<div class='vehicle-specs'>";
-        echo "<h3>Szczegóły pojazdu</h3>";
-        echo "<p><strong>Kolor:</strong> " . $pojazd['kolor'] . "</p>";
-        echo "<p><strong>Rodzaj nadwozia:</strong> " . $pojazd['rodzaj_nadwozia'] . "</p>";
-        echo "<p><strong>Pojemność silnika:</strong> " . $pojazd['pojemnosc_silnika'] . " L</p>";
-        echo "<p><strong>Moc:</strong> " . $pojazd['moc_kw'] . " kW</p>";
-        echo "<p><strong>VIN:</strong> " . $pojazd['vin'] . "</p>";
-        echo "<p><strong>Skrzynia biegów:</strong> " . $pojazd['skrzynia_biegow'] . "</p>";
-        echo "<p><strong>Napęd:</strong> " . $pojazd['naped'] . "</p>";
-        echo "<p><strong>Kierownica:</strong> " . ($pojazd['kierownica_prawa'] ? 'Prawa' : 'Lewa') . "</p>";
-        echo "<p><strong>Liczba drzwi:</strong> " . $pojazd['liczba_drzwi'] . "</p>";
-        echo "<p><strong>Liczba miejsc:</strong> " . $pojazd['liczba_miejsc'] . "</p>";
-        echo "<p><strong>Kraj pochodzenia:</strong> " . $pojazd['kraj_pochodzenia'] . "</p>";
-        echo "<p><strong>Data pierwszej rejestracji:</strong> " . date('d-m-Y', strtotime($pojazd['data_pierwszej_rejestracji'])) . "</p>";
-        echo "<p><strong>Numer rejestracyjny:</strong> " . $pojazd['numer_rejestracyjny'] . "</p>";
-        echo "<p><strong>Stan techniczny:</strong> " . $pojazd['stan_techniczny'] . "</p>";
-        echo "</div>"; // .vehicle-specs
-        
-        if ($pojazd['wyposazenie_dodatkowe']) {
-            echo "<div class='vehicle-extra-equipment'>";
-            echo "<h3>Wyposażenie dodatkowe</h3>";
-            echo "<p>" . nl2br($pojazd['wyposazenie_dodatkowe']) . "</p>";
-            echo "</div>"; // .vehicle-extra-equipment
-        }
-        
-        echo "<a class='btn-reserve' href='rezerwacja.php?id=" . $pojazd['id_pojazdu'] . "'>Zarezerwuj pojazd</a>";
-        echo "</div>"; // .vehicle-details
-        
-        // Zapytanie o podobne pojazdy na podstawie typu pojazdu, liczby drzwi, i roku produkcji
-        $sql_similar = "
-            SELECT * FROM Pojazdy 
-            WHERE typ_pojazdu = :typ_pojazdu 
-            AND liczba_drzwi = :liczba_drzwi 
-            AND ABS(rok_produkcji - :rok_produkcji) <= 2 
-            AND id_pojazdu != :id 
-            LIMIT 3
-        ";
-        
-        $stmt_similar = $pdo->prepare($sql_similar);
-        $stmt_similar->bindParam(':typ_pojazdu', $pojazd['typ_pojazdu']);
-        $stmt_similar->bindParam(':liczba_drzwi', $pojazd['liczba_drzwi']);
-        $stmt_similar->bindParam(':rok_produkcji', $pojazd['rok_produkcji']);
-        $stmt_similar->bindParam(':id', $pojazd['id_pojazdu']);
-        $stmt_similar->execute();
-        $similar_vehicles = $stmt_similar->fetchAll(PDO::FETCH_ASSOC);
-
-        if ($similar_vehicles) {
-            echo "<div class='similar-vehicles'>";
-            echo "<h2>Podobne pojazdy</h2>";
-            echo "<div class='vehicle-list'>";
-            foreach ($similar_vehicles as $similar) {
-                echo "<div class='vehicle-item'>";
-                echo "<img src='../assets/car_place.png' alt='Zdjęcie pojazdu' class='vehicle-thumbnail'>";
-                echo "<h3>" . htmlspecialchars($similar['marka']) . " " . htmlspecialchars($similar['model']) . "</h3>";
-                echo "<p>Rok produkcji: " . htmlspecialchars($similar['rok_produkcji']) . "</p>";
-                echo "<p>Przebieg: " . number_format($similar['przebieg'], 0, ',', '.') . " km</p>";
-                echo "<p class='price'>" . number_format($similar['cena'], 2, ',', '.') . " PLN</p>";
-                echo "<a class='details-link' href='szczegoly.php?id=" . $similar['id_pojazdu'] . "'>Zobacz szczegóły</a>";
-                echo "</div>";
-            }
-            
-            echo "</div>";
-            echo "</div>"; // .similar-vehicles
-        }
-
-    } else {
-        echo "<p>Nie znaleziono pojazdu o takim ID.</p>";
-    }
-} else {
-    echo "<p>Brak ID pojazdu w zapytaniu.</p>";
-}
+    if ($pojazd):
 ?>
-<?php include '../includes/footer.php'; ?>
-
 <style>
-.vehicle-details {
-    max-width: 1200px;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+.detail-container {
+    max-width: 1100px;
+    margin: 40px auto;
+    font-family: Arial, sans-serif;
 }
-
-.vehicle-summary {
+.detail-top {
     display: flex;
-    gap: 30px;
-    margin-bottom: 30px;
+    justify-content: space-between;
+    align-items: flex-start;
 }
-
-.vehicle-image img {
-    width: 100%;
+.detail-left img {
     max-width: 500px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    border-radius: 10px;
 }
-
-.vehicle-info p {
-    font-size: 18px;
-    line-height: 1.6;
+.detail-right {
+    flex: 1;
+    padding-left: 40px;
 }
-
-.vehicle-specs h3,
-.vehicle-extra-equipment h3 {
-    font-size: 20px;
-    margin-top: 20px;
+.detail-right h1 {
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+.detail-right .price {
+    color: #d80000;
+    font-size: 28px;
     font-weight: bold;
 }
-
-.vehicle-specs p {
-    font-size: 16px;
-    margin: 8px 0;
-}
-
-.btn-reserve {
-    display: inline-block;
-    margin-top: 20px;
-    padding: 10px 20px;
-    background-color: #007bff;
+.detail-right .btn {
+    background: #d80000;
     color: white;
-    border-radius: 5px;
+    padding: 12px 24px;
+    margin-top: 20px;
+    display: inline-block;
+    border-radius: 8px;
     text-decoration: none;
     font-weight: bold;
 }
-
-.btn-reserve:hover {
-    background-color: #0056b3;
-}
-
-.similar-vehicles {
-    margin-top: 50px;
-    padding: 20px;
-    background-color: #f8f9fa;
+.detail-thumbs img {
+    width: 100px;
+    margin: 10px 10px 0 0;
     border-radius: 8px;
 }
-
-.similar-vehicles h2 {
-    font-size: 24px;
-    margin-bottom: 20px;
-    text-align: center;
+.section {
+    margin-top: 40px;
 }
-
-.vehicle-list {
+.section h2 {
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+.section .specs {
     display: flex;
-    justify-content: space-between;
+    gap: 40px;
+    flex-wrap: wrap;
+}
+.specs div {
+    min-width: 150px;
+}
+.similar-vehicles {
+    display: flex;
     gap: 20px;
     flex-wrap: wrap;
 }
-
-.vehicle-item h3 {
-    font-size: 18px;
-    margin: 10px 0 5px;
+.similar-card {
+    background: #fff;
+    border-radius: 10px;
+    width: 250px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    padding: 15px;
+    text-align: center;
 }
-
-.vehicle-item .price {
+.similar-card img {
+    width: 100%;
+    border-radius: 8px;
+}
+.similar-card .price {
+    color: #d80000;
     font-weight: bold;
-    margin: 10px 0;
 }
-
-.details-link {
+.similar-card a {
     display: inline-block;
     margin-top: 10px;
-    padding: 8px 12px;
-    background-color: #007bff;
+    background: #d80000;
     color: white;
+    padding: 8px 14px;
+    border-radius: 6px;
     text-decoration: none;
-    border-radius: 5px;
-    font-size: 14px;
 }
-
-.details-link:hover {
-    background-color: #0056b3;
-}
-
 </style>
+
+<div class="detail-container">
+    <div class="detail-top">
+        <div class="detail-left">
+            <img src="../assets/car_place.png" alt="Auto">
+        </div>
+        <div class="detail-right">
+            <h1><?= htmlspecialchars($pojazd['marka'] . ' ' . $pojazd['model']) ?>, <?= $pojazd['rok_produkcji'] ?></h1>
+            <div class="price"><?= number_format($pojazd['cena'], 0, ',', ' ') ?> zł</div>
+            <a href="rezerwacja.php?id=<?= $pojazd['id_pojazdu'] ?>" class="btn">Skontaktuj się</a>
+            <div class="detail-thumbs">
+                <img src="../assets/car_place.png" alt="">
+                <img src="../assets/car_place.png" alt="">
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Charakterystyka</h2>
+        <div class="specs">
+            <div><strong>Rok produkcji:</strong><br><?= $pojazd['rok_produkcji'] ?></div>
+            <div><strong>Paliwo:</strong><br><?= $pojazd['rodzaj_paliwa'] ?></div>
+            <div><strong>Kolor:</strong><br><?= $pojazd['kolor'] ?></div>
+            <div><strong>Przebieg:</strong><br><?= number_format($pojazd['przebieg'], 0, ',', ' ') ?> km</div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Opis pojazdu</h2>
+        <p><?= nl2br(htmlspecialchars($pojazd['stan_techniczny'])) ?></p>
+    </div>
+
+    <?php
+    // podobne
+    $stmt_similar = $pdo->prepare("
+        SELECT * FROM Pojazdy 
+        WHERE id_pojazdu != :id 
+        AND marka = :marka 
+        ORDER BY RAND() 
+        LIMIT 3
+    ");
+    $stmt_similar->execute([
+        'id' => $pojazd['id_pojazdu'],
+        'marka' => $pojazd['marka']
+    ]);
+    $similar = $stmt_similar->fetchAll(PDO::FETCH_ASSOC);
+    if ($similar):
+    ?>
+    <div class="section">
+        <h2>Podobne oferty</h2>
+        <div class="similar-vehicles">
+            <?php foreach ($similar as $car): ?>
+                <div class="similar-card">
+                    <img src="../assets/car_place.png" alt="<?= $car['model'] ?>">
+                    <h3><?= htmlspecialchars($car['marka'] . ' ' . $car['model']) ?></h3>
+                    <div class="price"><?= number_format($car['cena'], 0, ',', ' ') ?> zł</div>
+                    <p><?= number_format($car['przebieg'], 0, ',', ' ') ?> km</p>
+                    <p><?= $car['rodzaj_paliwa'] ?></p>
+                    <a href="szczegoly.php?id=<?= $car['id_pojazdu'] ?>">Zobacz więcej</a>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    </div>
+    <?php endif; ?>
+</div>
+
+<?php
+    else:
+        echo "<p>Nie znaleziono pojazdu.</p>";
+    endif;
+} else {
+    echo "<p>Brak ID pojazdu w zapytaniu.</p>";
+}
+include '../includes/footer.php';
+?>
