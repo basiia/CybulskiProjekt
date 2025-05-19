@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <footer style="background-color: #000; color: white; padding: 40px 20px; font-size: 14px;">
   <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 40px; max-width: 1200px; margin: 0 auto;">
 
@@ -12,6 +13,27 @@
         <span style="color: red;">📧</span> kontakt@example.com
       </p>
       <p style="margin-top: 16px;">© 2025</p>
+=======
+</main>
+<footer>
+    <div class="footer-top">
+        <div>
+            <strong>Karpol</strong><br>
+            Adres Warszawa, ul. Warszawska 1<br>
+            📞 +48 555 555 555<br>
+            ✉ kontakt@example.com
+        </div>
+        <div>
+            <p>Pomagamy znaleźć samochód dopasowany do Twoich potrzeb</p>
+            <a href="#">Polityka prywatności</a> |
+            <a href="#">Regulamin</a>
+            <div style="margin-top: 10px;">
+                <a href="#"><img src="yt.svg" alt="YT" height="16"></a>
+                <a href="#"><img src="fb.svg" alt="FB" height="16"></a>
+                <a href="#"><img src="insta.svg" alt="Insta" height="16"></a>
+            </div>
+        </div>
+>>>>>>> c9d6b7b5abbae0e6a3ed725c5ca0c1352febc04c
     </div>
 
     <!-- Kolumna 2 – Tekst pomocniczy -->

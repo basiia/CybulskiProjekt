@@ -20,27 +20,22 @@ if (isset($_GET['id'])) {
     if ($pojazd) {
         // Wyświetlamy szczegóły pojazdu
         echo "<div class='vehicle-details'>";
-        echo "<h1>Rezerwacja pojazdu: " . $pojazd['marka'] . " " . $pojazd['model'] . "</h1>";
-        echo "<img src='../assets/car_place.png' alt='" . $pojazd['marka'] . " " . $pojazd['model'] . "' class='vehicle-image'>";
-
+        echo "<h1>Rezerwacja pojazdu: " . htmlspecialchars($pojazd['marka']) . " " . htmlspecialchars($pojazd['model']) . "</h1>";
+        echo "<img src='../assets/car_place.png' alt='" . htmlspecialchars($pojazd['marka'] . ' ' . $pojazd['model']) . "' class='vehicle-image'>";
 
         // Szczegóły pojazdu
-        echo "<p><strong>Cena:</strong> " . $pojazd['cena'] . " PLN</p>";
-        echo "<p><strong>Rok produkcji:</strong> " . $pojazd['rok_produkcji'] . "</p>";
-        echo "<p><strong>Przebieg:</strong> " . $pojazd['przebieg'] . " km</p>";
-        echo "<p><strong>Typ paliwa:</strong> " . $pojazd['rodzaj_paliwa'] . "</p>";
+        echo "<p><strong>Cena:</strong> " . number_format($pojazd['cena'], 2, ',', '.') . " PLN</p>";
+        echo "<p><strong>Rok produkcji:</strong> " . htmlspecialchars($pojazd['rok_produkcji']) . "</p>";
+        echo "<p><strong>Przebieg:</strong> " . number_format($pojazd['przebieg'], 0, ',', ' ') . " km</p>";
+        echo "<p><strong>Typ paliwa:</strong> " . htmlspecialchars($pojazd['rodzaj_paliwa']) . "</p>";
         echo "</div>";
 
-        // Formularz rezerwacji
+        // Formularz rezerwacji (bez daty rezerwacji)
         echo "<form method='POST' action='../functions/zarejestruj_rezerwacje.php' class='reservation-form'>";
         echo "<input type='hidden' name='id_pojazdu' value='" . $pojazd['id_pojazdu'] . "'>";
         echo "<input type='hidden' name='id_user' value='" . $_SESSION['id_user'] . "'>";
-        
-        // Pola formularza
-        echo "<label for='data_rezerwacji'>Data rezerwacji:</label><br>";
-        echo "<input type='date' name='data_rezerwacji' required><br>";
 
-        echo "<label for='zaliczka'>Wybierz procent zaliczki:</label><br>";
+        echo "<label for='zaliczka_procent'>Wybierz procent zaliczki:</label><br>";
         echo "<select id='zaliczka_procent' name='zaliczka_procent' required>";
         echo "<option value='5'>5%</option>";
         echo "<option value='10'>10%</option>";
@@ -49,7 +44,10 @@ if (isset($_GET['id'])) {
         echo "</select><br>";
 
         echo "<label for='zaliczka_wartosc'>Wielkość zaliczki (PLN):</label><br>";
-        echo "<input type='text' id='zaliczka_wartosc' name='wielkosc_zaliczki' readonly><br>";
+        echo "<input type='text' id='zaliczka_wartosc' name='wielkosc_zaliczki' readonly required><br>";
+
+        echo "<input type='submit' value='Zarezerwuj' class='submit-btn'>";
+        echo "</form>";
 
         // Skrypt do obliczania zaliczki
         echo "<script>
@@ -60,18 +58,12 @@ if (isset($_GET['id'])) {
             function updateZaliczka() {
                 const procent = zaliczkaSelect.value;
                 const wartoscZaliczki = (cenaPojazdu * procent) / 100;
-                zaliczkaWartosc.value = wartoscZaliczki.toFixed(2) + ' PLN';
+                zaliczkaWartosc.value = wartoscZaliczki.toFixed(2);
             }
             
-            // Wywołanie funkcji po załadowaniu strony
             updateZaliczka();
-            
-            // Zaktualizuj wartość zaliczki przy zmianie procentu
             zaliczkaSelect.addEventListener('change', updateZaliczka);
         </script>";
-
-        echo "<input type='submit' value='Zarezerwuj' class='submit-btn'>";
-        echo "</form>";
     } else {
         echo "<p>Nie znaleziono pojazdu do rezerwacji.</p>";
     }
@@ -80,7 +72,6 @@ if (isset($_GET['id'])) {
 }
 ?>
 <?php include '../includes/footer.php'; ?>
-
 
 <style>
     /* Stylowanie detali pojazdu */
@@ -112,7 +103,6 @@ if (isset($_GET['id'])) {
         margin-top: 10px;
     }
 
-    .reservation-form input[type="date"],
     .reservation-form select,
     .reservation-form input[type="text"],
     .reservation-form input[type="submit"] {
@@ -121,6 +111,7 @@ if (isset($_GET['id'])) {
         margin-top: 5px;
         border-radius: 5px;
         border: 1px solid #ccc;
+        box-sizing: border-box;
     }
 
     .reservation-form input[type="submit"] {

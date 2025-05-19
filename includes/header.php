@@ -1,3 +1,9 @@
+<<<<<<< HEAD
+=======
+<?php
+session_start();
+?>
+>>>>>>> c9d6b7b5abbae0e6a3ed725c5ca0c1352febc04c
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -152,10 +158,36 @@
 <body>
 
 <header>
+<<<<<<< HEAD
   <div class="logo">Karpol</div>
   <div class="auth-links">
   <a href="../pages/login.php">Zaloguj się</a> | <a href="../pages/rejestracja.php">Zarejestruj się
   </a>
 </header>
 
+=======
+    <div class="logo">
+        <a href="index.php" style="text-decoration: none; color: inherit;">Karpol</a>
+    </div>
+    <div class="auth-links">
+        <?php
+        if (isset($_SESSION['id_user'])) {
+            echo "<span>Zalogowano jako: <strong>{$_SESSION['imie']}</strong> ({$_SESSION['rola']})</span> ";
+
+            if ($_SESSION['rola'] === 'Admin' || $_SESSION['rola'] === 'Pracownik') {
+                echo "<a href='./admin_panel.php'>Panel pracownika</a> | ";
+            } elseif ($_SESSION['rola'] === 'Klient') {
+                echo "<a href='./moje_rezerwacje.php'>Moje rezerwacje</a> | ";
+            }
+
+            echo "<a href='./logout.php'>Wyloguj</a>";
+        } else {
+            echo "<a href='./login.php'>Zaloguj się</a> | <a href='./rejestracja.php'>Zarejestruj</a>";
+        }
+        ?>
+    </div>
+</header>
+
+
+>>>>>>> c9d6b7b5abbae0e6a3ed725c5ca0c1352febc04c
 <main>
