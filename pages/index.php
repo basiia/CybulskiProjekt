@@ -1,149 +1,4 @@
-<?php include '../includes/header.php'; ?>
-<?php include '../includes/db.php'; ?>
-
-<!-- Sekcja HERO -->
-<section style="position: relative; background: white; padding: 120px 40px 80px; overflow: hidden;">
-  <!-- Obraz auta po prawej stronie -->
-  <img src="../assets/car.png" alt="Auto"
-       style="position: absolute; bottom: 0; right: 0; max-width: 700px; z-index: 1;" />
-
-  <!-- Lewa kolumna z tekstem i filtrami -->
-  <div style="position: relative; z-index: 2; padding-left: 40px; max-width: 1000px;">
-    <h1 style="font-size: 48px; font-weight: bold; line-height: 1.2; margin-bottom: 40px;">
-      Znajdź swój<br>idealny samochód
-    </h1>
-
-    <!-- Formularz filtrów -->
-    <form action="search.php" method="get" style="display: flex; gap: 20px; flex-wrap: nowrap; align-items: center;">
-      <select name="marka" style="padding: 16px 20px; font-size: 16px; border-radius: 10px; border: 1px solid #ccc; min-width: 150px;">
-        <option value="">Marka</option>
-        <option>Audi</option><option>BMW</option><option>Volkswagen</option>
-      </select>
-
-      <select name="model" style="padding: 16px 20px; font-size: 16px; border-radius: 10px; border: 1px solid #ccc; min-width: 150px;">
-        <option value="">Model</option>
-        <option>A5</option><option>X5</option><option>Golf</option>
-      </select>
-
-      <select name="paliwo" style="padding: 16px 20px; font-size: 16px; border-radius: 10px; border: 1px solid #ccc; min-width: 150px;">
-        <option value="">Paliwo</option>
-        <option>Benzyna</option><option>Diesel</option><option>Elektryczny</option><option>Hybryda</option>
-      </select>
-
-      <select name="rocznik" style="padding: 16px 20px; font-size: 16px; border-radius: 10px; border: 1px solid #ccc; min-width: 150px;">
-        <option value="">Rocznik</option>
-        <?php for ($i = date('Y'); $i >= 1970; $i--): ?>
-          <option><?= $i ?></option>
-        <?php endfor; ?>
-      </select>
-
-      <button type="submit" style="padding: 16px 28px; font-size: 16px; font-weight: bold; border-radius: 10px; background: #d80000; color: white; border: none; cursor: pointer;">
-        Szukaj
-      </button>
-    </form>
-
-    <!-- Wyszukiwanie zaawansowane -->
-    <div style="display: flex; align-items: center; gap: 8px; margin-top: 20px;">
-      <img src="../assets/filter-icon.png" alt="Filtr" style="width: 20px; height: 20px;">
-      <span style="font-size: 14px; color: #333;">Wyszukiwanie zaawansowane</span>
-    </div>
-  </div>
-</section>
-
-<!-- Polecane samochody -->
 <?php
-<<<<<<< HEAD
-$stmt = $pdo->query("SELECT * FROM Pojazdy WHERE status = 'Dostępny' ORDER BY RAND() LIMIT 3");
-$polecane = $stmt->fetchAll(PDO::FETCH_ASSOC);
-?>
-
-<section style="background: white; padding: 40px 20px;">
-  <h2 style="font-size: 26px; font-weight: bold; margin-bottom: 30px;">Polecane samochody</h2>
-  <div class="car-grid" style="display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;">
-    <?php foreach ($polecane as $auto): ?>
-      <div class="car-card" style="background: white; border: 1px solid #eee; border-radius: 12px; padding: 20px; width: 260px; text-align: center; box-shadow: 0 0 8px rgba(0,0,0,0.03);">
-        <img src="../assets/car_place.png" alt="<?= htmlspecialchars($auto['marka']) ?> <?= htmlspecialchars($auto['model']) ?>" style="width: 100%; height: auto; border-radius: 8px; margin-bottom: 10px;">
-        <h3><?= htmlspecialchars($auto['marka']) ?> <?= htmlspecialchars($auto['model']) ?></h3>
-        <p><strong><?= number_format($auto['cena'], 2, ',', '.') ?> zł</strong></p>
-        <p><?= number_format($auto['przebieg'], 0, ',', '.') ?> km</p>
-        <p><?= htmlspecialchars($auto['rodzaj_paliwa']) ?></p>
-        <a href="szczegoly.php?id=<?= $auto['id_pojazdu'] ?>">
-          <button class="button" style="background: #d80000; color: white; padding: 10px 16px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; margin-top: 10px;">
-            Zobacz więcej
-          </button>
-        </a>
-      </div>
-    <?php endforeach; ?>
-  </div>
-</section>
-
-<!-- Sekcja: Filtruj + Dlaczego + Opinie + Formularz -->
-<div style="padding: 60px 40px; background: #f6f6f6;">
-
-  <!-- FILTRUJ i DLACZEGO MY – jedna linia -->
-  <div style="display: flex; justify-content: space-between; gap: 40px; flex-wrap: wrap; margin-bottom: 40px;">
-
-    <!-- Filtruj po lokalizacji -->
-    <div style="flex: 1; min-width: 250px;">
-      <h3 style="font-size: 18px; font-weight: bold; margin-bottom: 20px;">Filtruj po lokalizacji</h3>
-      <div style="display: flex; flex-wrap: wrap; gap: 10px;">
-        <button style="padding: 10px 16px; background: white; border: 1px solid #ccc; border-radius: 6px; cursor: pointer;">Warszawa</button>
-        <button style="padding: 10px 16px; background: white; border: 1px solid #ccc; border-radius: 6px; cursor: pointer;">Kraków</button>
-        <button style="padding: 10px 16px; background: white; border: 1px solid #ccc; border-radius: 6px; cursor: pointer;">Wrocław</button>
-        <button style="padding: 10px 16px; background: white; border: 1px solid #ccc; border-radius: 6px; cursor: pointer;">Poznań</button>
-        <button style="padding: 10px 16px; background: white; border: 1px solid #ccc; border-radius: 6px; cursor: pointer;">Gdańsk</button>
-      </div>
-    </div>
-
-    <!-- Dlaczego my -->
-    <div style="flex: 1; min-width: 250px;">
-      <h3 style="font-size: 18px; font-weight: bold; margin-bottom: 20px;">Dlaczego my?</h3>
-      <ul style="list-style: none; padding-left: 0; font-size: 14px;">
-        <li style="margin-bottom: 8px;">✔ Sprawdzone pojazdy</li>
-        <li style="margin-bottom: 8px;">✔ Pełna historia serwisowa</li>
-        <li style="margin-bottom: 8px;">✔ Bezpieczne transakcje</li>
-        <li style="margin-bottom: 8px;">✔ Szybka obsługa</li>
-      </ul>
-    </div>
-
-  </div>
-
-  <!-- OPINIE i FORMULARZ – pod spodem -->
-  <div style="display: flex; justify-content: space-between; gap: 40px; flex-wrap: wrap;">
-
-    <!-- Opinie klientów -->
-    <div style="flex: 1; min-width: 300px;">
-      <h3 style="font-size: 18px; font-weight: bold; margin-bottom: 20px;">Opinie klientów</h3>
-      <div style="background: white; padding: 20px; border-radius: 10px; border-left: 4px solid red;">
-        <p style="font-style: italic; font-size: 15px; line-height: 1.6;">
-          “Bardzo profesjonalna obsługa i szybki kontakt. Auto w idealnym stanie. Polecam z całego serca!”
-        </p>
-        <p style="font-weight: bold; margin-top: 10px;">Jan Kowalski, Warszawa</p>
-        <p style="font-size: 13px; color: #777;">20.03.2025</p>
-        <button style="margin-top: 10px; padding: 8px 12px; background: #d80000; color: white; border: none; border-radius: 6px; cursor: pointer;">
-          Zobacz więcej
-        </button>
-      </div>
-    </div>
-
-    <!-- Formularz kontaktowy -->
-    <div style="flex: 1; min-width: 300px;">
-      <h3 style="font-size: 18px; font-weight: bold; margin-bottom: 20px;">Formularz kontaktowy</h3>
-      <form>
-        <input type="text" placeholder="Imię i Nazwisko" style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; margin-bottom: 10px;" />
-        <input type="email" placeholder="Email" style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; margin-bottom: 10px;" />
-        <input type="tel" placeholder="Telefon" style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; margin-bottom: 10px;" />
-        <textarea rows="5" placeholder="Wiadomość" style="width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 6px; margin-bottom: 10px;"></textarea>
-        <button type="submit" style="width: 100%; padding: 12px; background: #d80000; color: white; font-weight: bold; border: none; border-radius: 6px; cursor: pointer;">
-          Skontaktuj się
-        </button>
-      </form>
-    </div>
-
-  </div>
-</div>
-
-=======
 include '../includes/db.php';
 include '../includes/header.php';
 
@@ -206,7 +61,6 @@ if (isset($_GET['id_lokacji'])) {
     </select>
 
     <?php if ($selected_location): ?>
-        <!-- Przekazujemy id_lokacji do search.php, aby filtrować tam po lokalizacji -->
         <input type="hidden" name="id_lokacji" value="<?= (int)$id_lokacji ?>">
     <?php endif; ?>
 
@@ -222,7 +76,7 @@ if (isset($_GET['id_lokacji'])) {
             <p><strong><?= number_format($car['cena'], 0, ',', ' ') ?> zł</strong></p>
             <p><?= number_format($car['przebieg'], 0, ',', ' ') ?> km</p>
             <p><?= htmlspecialchars($car['rodzaj_paliwa']) ?></p>
-            <a href="szczegoly.php?id=<?= urlencode($car['id_pojazdu']) ?>" 
+            <a href="szczegoly.php?id=<?= urlencode($car['id_pojazdu']) ?>"
                style="display: inline-block; padding: 10px 20px; background: #d80000; color: white; border-radius: 8px; text-decoration: none; font-weight: bold;">
                Zobacz więcej
             </a>
@@ -233,11 +87,10 @@ if (isset($_GET['id_lokacji'])) {
 <div class="filters">
     <h2>Filtruj po lokalizacji</h2>
     <?php
-    // resetujemy wynik, bo wcześniej iterowaliśmy
     $stmt_locations->execute();
     while ($row = $stmt_locations->fetch()):
     ?>
-        <a href="?id_lokacji=<?= (int)$row['id_lokacji'] ?>" 
+        <a href="?id_lokacji=<?= (int)$row['id_lokacji'] ?>"
            style="display:inline-block; margin: 5px; padding: 8px 15px; background: #d80000; color: white; border-radius: 5px; text-decoration: none;">
            <?= htmlspecialchars($row['miasto']) ?>
         </a>
@@ -254,16 +107,29 @@ if (isset($_GET['id_lokacji'])) {
     </ul>
 </div>
 
+<?php
+$stmt_opinia = $pdo->query("SELECT * FROM opinie ORDER BY RAND() LIMIT 1");
+$opinia = $stmt_opinia->fetch(PDO::FETCH_ASSOC);
+?>
+
+<?php if ($opinia): ?>
 <div class="testimonial">
     <h2>Opinie klientów</h2>
-    <p>“Bardzo profesjonalna obsługa i szybki kontakt. Auto w idealnym stanie. Polecam z całego serca!”</p>
-    <p><strong>Jan Kowalski, Warszawa</strong> – 20.03.2025</p>
-    <button>Zobacz więcej</button>
+    <p>“<?= htmlspecialchars($opinia['tresc']) ?>”</p>
+    <p><strong><?= htmlspecialchars($opinia['imie_nazwisko']) ?>, <?= htmlspecialchars($opinia['miasto']) ?></strong> – <?= date('d.m.Y', strtotime($opinia['data_opinii'])) ?></p>
+    <button onclick="location.href='opinie.php'">Zobacz więcej</button>
 </div>
+<?php else: ?>
+<div class="testimonial">
+    <h2>Opinie klientów</h2>
+    <p>Brak opinii do wyświetlenia.</p>
+</div>
+<?php endif; ?>
+
 
 <div class="contact-form">
     <h2>Formularz kontaktowy</h2>
-    <form method="POST" action="kontakt.php">
+    <form id="contactForm" method="POST" action="../functions/kontakt.php">
         <input type="text" name="name" placeholder="Imię i Nazwisko" required><br><br>
         <input type="email" name="email" placeholder="Email" required><br><br>
         <input type="tel" name="telefon" placeholder="Telefon"><br><br>
@@ -271,7 +137,53 @@ if (isset($_GET['id_lokacji'])) {
         <button type="submit">Skontaktuj się</button>
     </form>
 </div>
->>>>>>> c9d6b7b5abbae0e6a3ed725c5ca0c1352febc04c
+
+<!-- Modal potwierdzenia -->
+<div id="modal" class="modal">
+  <div class="modal-content">
+    <span id="closeModal" class="close">&times;</span>
+    <p>Twoja wiadomość została wysłana. Dziękujemy!</p>
+  </div>
+</div>
+
+<style>
+.modal {
+  display: none;
+  position: fixed; 
+  z-index: 1000; 
+  left: 0;
+  top: 0;
+  width: 100%; 
+  height: 100%;
+  overflow: auto; 
+  background-color: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+  background-color: #fff;
+  margin: 15% auto;
+  padding: 20px;
+  border-radius: 10px;
+  width: 80%;
+  max-width: 400px;
+  text-align: center;
+  font-size: 18px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+  user-select: none;
+}
+
+.close:hover {
+  color: #000;
+}
+</style>
 
 <script>
 // Dynamiczne ładowanie modeli
@@ -299,6 +211,47 @@ document.getElementById('marka').addEventListener('change', function () {
         modelSelect.disabled = true;
     }
 });
+
+// Obsługa wysyłania formularza kontaktowego z modalem
+document.getElementById('contactForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const form = this;
+    const formData = new FormData(form);
+    const modal = document.getElementById('modal');
+    const closeModal = document.getElementById('closeModal');
+
+    fetch(form.action, {
+        method: 'POST',
+        body: formData,
+    })
+    .then(response => response.json())
+    .then(data => {
+        if(data.success){
+            modal.style.display = 'block';
+            form.reset();
+        } else {
+            alert('Błąd: ' + (data.message || 'Coś poszło nie tak.'));
+        }
+    })
+    .catch(() => {
+        alert('Błąd połączenia z serwerem.');
+    });
+
+    // Zamknięcie modala po kliknięciu "x"
+    closeModal.onclick = function() {
+        modal.style.display = 'none';
+    }
+
+    // Zamknięcie modala po kliknięciu poza okienko
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
+    }
+});
 </script>
 
-<?php include '../includes/footer.php'; ?>
+<?php
+include '../includes/footer.php';
+?>

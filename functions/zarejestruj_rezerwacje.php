@@ -55,9 +55,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt_update->execute();
 
         $pdo->commit();
+        session_start();
+        $_SESSION['popup'] = "Rezerwacja pojazdu została pomyślnie zarejestrowana!";
 
-        echo "<p>Rezerwacja została pomyślnie zarejestrowana!</p>";
-        echo "<a href='../pages/index.php'>Powrót do strony głównej</a>";
+        header("Location: ../pages/szczegoly.php?id=" . urlencode($id_pojazdu));
+        exit;
+
     } catch (PDOException $e) {
         $pdo->rollBack();
         echo "Błąd podczas zapisu rezerwacji: " . $e->getMessage();

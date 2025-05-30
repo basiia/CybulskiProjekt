@@ -22,25 +22,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_id'])) {
     echo "<p class='success'>Rezerwacja #{$id} zaktualizowana.</p>";
 }
 
-// Obsługa filtrowania po ID
+// Odczyt filtrów i sortowania z GET
 $filter_id = isset($_GET['id']) ? (int)$_GET['id'] : null;
 
+// Domyślny kierunek sortowania (malejąco)
+$sort_order = 'desc';
+
+// Jeśli w URL jest sort (asc lub desc) to używamy tego
+if (isset($_GET['sort']) && in_array(strtolower($_GET['sort']), ['asc', 'desc'])) {
+    $sort_order = strtolower($_GET['sort']);
+}
+
+// Przygotowanie zapytania z filtrem i sortowaniem
 if ($filter_id) {
     $stmt = $pdo->prepare("SELECT r.*, p.marka, p.model, u.imie, u.nazwisko
         FROM rezerwacje r
         JOIN pojazdy p ON r.id_pojazdu = p.id_pojazdu
         JOIN uzytkownicy u ON r.id_user = u.id_user
         WHERE r.id_rezerwacji = :id
-        ORDER BY r.data_rezerwacji DESC");
+        ORDER BY r.id_rezerwacji $sort_order");
     $stmt->execute([':id' => $filter_id]);
 } else {
     $stmt = $pdo->query("SELECT r.*, p.marka, p.model, u.imie, u.nazwisko
         FROM rezerwacje r
         JOIN pojazdy p ON r.id_pojazdu = p.id_pojazdu
         JOIN uzytkownicy u ON r.id_user = u.id_user
-        ORDER BY r.data_rezerwacji DESC");
+        ORDER BY r.id_rezerwacji $sort_order");
 }
 $rezerwacje = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Funkcja do generowania linku sortowania
+function sort_link($current_order, $column, $filter_id) {
+    // Przełącz kierunek sortowania
+    $new_order = ($current_order === 'asc') ? 'desc' : 'asc';
+    // Budujemy URL z parametrami GET
+    $url = "?sort=$new_order";
+    if ($filter_id) {
+        $url .= "&id=$filter_id";
+    }
+    return $url;
+}
+
 ?>
 
 <style>
@@ -48,8 +70,9 @@ $rezerwacje = $stmt->fetchAll(PDO::FETCH_ASSOC);
     h1 { margin-bottom: 10px; }
     .success { background: #d4edda; color: #155724; padding: 10px; border-radius: 4px; margin-bottom: 20px; }
     table { width: 100%; border-collapse: collapse; margin-top: 20px; background: white; }
-    th, td { padding: 12px; border: 1px solid #ddd; text-align: center; }
+    th, td { padding: 12px; border: 1px solid #ddd; text-align: center; cursor: default; }
     th { background: #007bff; color: white; }
+    th.sortable { cursor: pointer; }
     form.inline { display: flex; gap: 8px; justify-content: center; align-items: center; }
     select, input[type="date"], input[type="number"] { padding: 4px 6px; border-radius: 4px; border: 1px solid #ccc; }
     button { padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer; }
@@ -57,16 +80,17 @@ $rezerwacje = $stmt->fetchAll(PDO::FETCH_ASSOC);
     .btn-save:hover { background: #218838; }
     .logout { display: inline-block; margin-top: 10px; text-decoration: none; color: #007bff; }
     .logout:hover { text-decoration: underline; }
+    th.sortable:hover { background-color: #0056b3; }
 </style>
 
 <h1>Panel pracownika / administratora</h1>
 
 <form method="get" style="margin: 10px 0; display: flex; gap: 10px; align-items: center;">
     <label for="id">Filtruj po ID rezerwacji:</label>
-    <input type="number" name="id" id="id" value="<?= isset($_GET['id']) ? (int)$_GET['id'] : '' ?>">
+    <input type="number" name="id" id="id" value="<?= $filter_id ?? '' ?>">
     <button type="submit" class="btn-save">Szukaj</button>
-    <?php if (isset($_GET['id'])): ?>
-        <a href="?" style="text-decoration: none; color: #dc3545; margin-left: 10px;">Wyczyść filtr</a>
+    <?php if ($filter_id !== null || isset($_GET['sort'])): ?>
+        <a href="?" style="text-decoration: none; color: #dc3545; margin-left: 10px;">Wyczyść filtr i sortowanie</a>
     <?php endif; ?>
 </form>
 
@@ -76,7 +100,16 @@ $rezerwacje = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <table>
         <thead>
             <tr>
-                <th>ID</th>
+                <th class="sortable">
+                    <a href="<?= sort_link($sort_order, 'id_rezerwacji', $filter_id) ?>" style="color: white; text-decoration: none;">
+                        ID
+                        <?php if ($sort_order === 'asc'): ?>
+                            &#9650; <!-- strzałka w górę -->
+                        <?php else: ?>
+                            &#9660; <!-- strzałka w dół -->
+                        <?php endif; ?>
+                    </a>
+                </th>
                 <th>Pojazd</th>
                 <th>Użytkownik</th>
                 <th>Data rezerwacji</th>
@@ -95,7 +128,6 @@ $rezerwacje = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <?=htmlspecialchars($r['marka'].' '.$r['model'])?>
                     </a>
                 </td>
-
                 <td><?=htmlspecialchars($r['imie'].' '.$r['nazwisko'])?></td>
                 <td><?=$r['data_rezerwacji']?></td>
                 <td>
