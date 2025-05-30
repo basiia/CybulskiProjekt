@@ -8,6 +8,44 @@ if (!isset($_SESSION['id_user']) || !in_array($_SESSION['rola'], ['Admin', 'Prac
     exit;
 }
 
+// Definiujemy aktualną stronę dla podświetlenia menu
+$currentPage = basename($_SERVER['PHP_SELF']);
+?>
+
+<style>
+    /* Nawigacja */
+    nav.admin-nav {
+        background-color: #007bff;
+        padding: 10px 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        display: flex;
+        gap: 20px;
+        font-family: Arial, sans-serif;
+    }
+    nav.admin-nav a {
+        color: white;
+        text-decoration: none;
+        font-weight: 600;
+        padding: 8px 15px;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+    }
+    nav.admin-nav a:hover {
+        background-color: #0056b3;
+    }
+    nav.admin-nav a.active {
+        background-color: #004085;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+</style>
+
+<nav class="admin-nav">
+    <a href="admin_panel.php" class="<?= $currentPage === 'admin_panel.php' ? 'active' : '' ?>">Rezerwacje</a>
+    <a href="ustawienia.php" class="<?= $currentPage === 'ustawienia.php' ? 'active' : '' ?>">Ustawienia konta</a>
+</nav>
+
+<?php
 // Obsługa aktualizacji rezerwacji
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_id'])) {
     $id = (int)$_POST['update_id'];
@@ -53,16 +91,13 @@ $rezerwacje = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Funkcja do generowania linku sortowania
 function sort_link($current_order, $column, $filter_id) {
-    // Przełącz kierunek sortowania
     $new_order = ($current_order === 'asc') ? 'desc' : 'asc';
-    // Budujemy URL z parametrami GET
     $url = "?sort=$new_order";
     if ($filter_id) {
         $url .= "&id=$filter_id";
     }
     return $url;
 }
-
 ?>
 
 <style>
@@ -104,9 +139,9 @@ function sort_link($current_order, $column, $filter_id) {
                     <a href="<?= sort_link($sort_order, 'id_rezerwacji', $filter_id) ?>" style="color: white; text-decoration: none;">
                         ID
                         <?php if ($sort_order === 'asc'): ?>
-                            &#9650; <!-- strzałka w górę -->
+                            &#9650;
                         <?php else: ?>
-                            &#9660; <!-- strzałka w dół -->
+                            &#9660;
                         <?php endif; ?>
                     </a>
                 </th>
