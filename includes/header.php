@@ -38,11 +38,11 @@ if (session_status() === PHP_SESSION_NONE) {
     if (logoutBtn) {
       logoutBtn.addEventListener('click', function (e) {
         e.preventDefault();
-        fetch('/CybulskiProjekt/pages/logout.php') 
+        fetch('../pages/logout.php') 
           .then(response => response.json())
           .then(data => {
             if (data.success) {
-              window.location.href = '/CybulskiProjekt/pages/index.php';
+              window.location.href = '../pages/index.php';
             } else {
               alert('Wylogowanie nie powiodło się.');
             }
