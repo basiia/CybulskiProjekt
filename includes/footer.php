@@ -1,24 +1,27 @@
-</main>
-<footer>
-    <div class="footer-top">
-        <div>
-            <strong>Karpol</strong><br>
-            Adres Warszawa, ul. Warszawska 1<br>
-            📞 +48 555 555 555<br>
-            ✉ kontakt@example.com
-        </div>
-        <div>
-            <p>Pomagamy znaleźć samochód dopasowany do Twoich potrzeb</p>
-            <a href="#">Polityka prywatności</a> |
-            <a href="#">Regulamin</a>
-            <div style="margin-top: 10px;">
-                <a href="#"><img src="yt.svg" alt="YT" height="16"></a>
-                <a href="#"><img src="fb.svg" alt="FB" height="16"></a>
-                <a href="#"><img src="insta.svg" alt="Insta" height="16"></a>
-            </div>
-        </div>
+<link rel="stylesheet" href="../styles/footer.css">
+
+<footer class="main-footer">
+  <div class="footer-container">
+    <div class="footer-left">
+      <h3>Nazwa!</h3>
+      <p>Adres Warszawa , ul. Warszawska, 1</p>
+      <p><img src="../assets/icon-phone.png" class="footer-icon" alt="Telefon">+48 555 555 555</p>
+      <p><img src="../assets/icon-mail.png" class="footer-icon" alt="Email">kontakt@example.com</p>
+      <p>&copy; <?= date("Y") ?></p>
     </div>
-    <p style="margin-top: 20px;">&copy; <?php echo date("Y"); ?></p>
+
+    <div class="footer-right">
+      <p class="footer-mission">Pomagamy znaleźć samochód dopasowany do Twoich potrzeb</p>
+      <div class="footer-links">
+        <a href="#">Polityka prywatności</a>
+        <a href="#">Regulamin</a>
+      </div>
+      <div class="social-icons">
+        <a href="#"><img src="../assets/icon-fb.png" alt="Facebook"></a>
+        <a href="#"><img src="../assets/icon-twitter.png" alt="Twitter"></a>
+        <a href="#"><img src="../assets/icon-yt.png" alt="YouTube"></a>
+        <a href="#"><img src="../assets/icon-ig.png" alt="Instagram"></a>
+      </div>
+    </div>
+  </div>
 </footer>
-</body>
-</html>

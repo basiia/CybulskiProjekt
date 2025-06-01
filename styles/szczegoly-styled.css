@@ -1,0 +1,144 @@
+body {
+    font-family: Arial, sans-serif;
+    background: #f9f9f9;
+    margin: 0;
+    padding: 0;
+}
+
+.vehicle-details {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.vehicle-title {
+    font-size: 32px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.vehicle-status-badge {
+    padding: 6px 14px;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 5px;
+    color: #fff;
+    text-transform: uppercase;
+}
+
+.status-dostepny {
+    background-color: #28a745;
+}
+
+.status-zarezerwowany {
+    background-color: #dc3545;
+}
+
+.status-inny {
+    background-color: #6c757d;
+}
+
+.vehicle-summary {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    margin-top: 20px;
+}
+
+.vehicle-image img {
+    width: 350px;
+    max-width: 100%;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+}
+
+.vehicle-info {
+    flex: 1;
+    min-width: 250px;
+    font-size: 16px;
+}
+
+.vehicle-info p {
+    margin: 8px 0;
+}
+
+.vehicle-specs {
+    margin-top: 30px;
+    font-size: 16px;
+}
+
+.vehicle-specs p {
+    margin-bottom: 6px;
+}
+
+.vehicle-extra-equipment {
+    margin-top: 30px;
+    background: #f1f1f1;
+    padding: 15px;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+.vehicle-history {
+    margin-top: 40px;
+    padding: 20px;
+    background-color: #f6f6f6;
+    border-radius: 8px;
+}
+
+.vehicle-history h3 {
+    margin-bottom: 10px;
+}
+
+.vehicle-history ul {
+    padding-left: 20px;
+}
+
+.vehicle-history li {
+    margin-bottom: 12px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 10px;
+}
+
+.btn-see-more {
+    display: inline-block;
+    margin-top: 10px;
+    background: #d80000;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+.btn-see-more:hover {
+    background-color: #a00000;
+}
+
+.btn-reserve {
+    display: inline-block;
+    margin-top: 30px;
+    background-color: #d80000;
+    color: #fff;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+.btn-reserve:hover {
+    background-color: #a00000;
+}
+
+.vehicle-unavailable {
+    margin-top: 30px;
+    color: #dc3545;
+    font-weight: bold;
+    font-size: 16px;
+}

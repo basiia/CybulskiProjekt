@@ -1,0 +1,53 @@
+.opinie-section {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.section-title {
+    text-align: center;
+    font-size: 32px;
+    margin-bottom: 30px;
+    font-weight: bold;
+}
+
+.opinie-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    justify-content: center;
+}
+
+.opinia-card {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    padding: 24px;
+    max-width: 350px;
+    width: 100%;
+}
+
+.opinia-text {
+    font-style: italic;
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 12px;
+}
+
+.opinia-author {
+    font-size: 15px;
+    font-weight: 600;
+    color: #000;
+    margin-bottom: 6px;
+}
+
+.opinia-date {
+    font-size: 13px;
+    color: #888;
+}
+
+.no-opinie {
+    text-align: center;
+    font-size: 18px;
+    color: #888;
+}

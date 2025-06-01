@@ -1,0 +1,50 @@
+.history-container {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 30px;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+}
+.history-container h1 {
+    margin-bottom: 25px;
+    font-size: 26px;
+    color: #222;
+}
+.history-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+.history-table th,
+.history-table td {
+    border: 1px solid #ddd;
+    padding: 12px 18px;
+    font-size: 15px;
+    text-align: left;
+}
+.history-table th {
+    background-color: #d80000;
+    color: white;
+}
+.history-table tr:nth-child(even) {
+    background-color: #f4f4f4;
+}
+.history-table tr:hover {
+    background-color: #f0f0f0;
+}
+.btn-back {
+    display: inline-block;
+    margin-top: 30px;
+    padding: 12px 22px;
+    background-color: #d80000;
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: background-color 0.3s ease;
+}
+.btn-back:hover {
+    background-color: #a60000;
+}
