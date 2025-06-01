@@ -1,92 +1,169 @@
 /* Nawigacja pomiędzy zakładkami */
 .sub-nav {
-    margin-bottom: 20px;
-    padding: 10px 0;
-    border-bottom: 1px solid #ccc;
-  }
-  .sub-nav a {
-    margin-right: 20px;
-    text-decoration: none;
-    color: #333;
-    font-weight: 500;
-  }
-  .sub-nav a:hover {
-    color: #005cbf;
-  }
-  .sub-nav a.active {
-    font-weight: bold;
-    text-decoration: underline;
-  }
-  
-  /* Kontener sekcji */
-  .section {
-    padding: 20px;
-    max-width: 900px;
-    margin: auto;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-  }
-  
-  /* Zawartość wewnątrz panelu*/
-  .panel-content {
-    margin-top: 20px;
-  }
-  
-  /* Formularz edycji danych */
-  .settings-form {
-    max-width: 500px;
-  }
-  .settings-form label {
-    display: block;
-    margin-top: 12px;
-    font-weight: bold;
-  }
-  .settings-form input {
-    width: 100%;
-    padding: 10px;
-    margin-top: 6px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  .settings-form hr {
-    margin: 20px 0 10px;
-    border: none;
-    border-top: 1px solid #ddd;
-  }
-  .settings-form small {
-    display: block;
-    margin-bottom: 8px;
-    color: #666;
-  }
-  .settings-form button {
-    padding: 10px 20px;
-    background-color: #d80000;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: bold;
-  }
-  .settings-form button:hover {
-    background-color: #d80000;
-  }
-  
-  /* Wiadomości */
-  .errors {
-    color: #b20000;
-    background-color: #ffe5e5;
-    border: 1px solid #ffcccc;
-    padding: 10px;
-    border-radius: 4px;
-    margin-bottom: 15px;
-  }
-  .success {
-    color: #006600;
-    background-color: #e6ffea;
-    border: 1px solid #b3ffcc;
-    padding: 10px;
-    border-radius: 4px;
-    margin-bottom: 15px;
-  }
-  
+  margin-bottom: 20px;
+  padding: 10px 0;
+  border-bottom: 1px solid #ccc;
+}
+.sub-nav a {
+  margin-right: 20px;
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+}
+.sub-nav a:hover {
+  color: #005cbf;
+}
+.sub-nav a.active {
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+/* Kontener sekcji */
+.section {
+  padding: 20px;
+  max-width: 900px;
+  margin: auto;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+}
+
+/* Zawartość wewnątrz panelu*/
+.panel-content {
+  margin-top: 20px;
+}
+
+/* Formularz edycji danych */
+.settings-form {
+  max-width: 500px;
+}
+.settings-form label {
+  display: block;
+  margin-top: 12px;
+  font-weight: bold;
+}
+.settings-form input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 6px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+.settings-form hr {
+  margin: 20px 0 10px;
+  border: none;
+  border-top: 1px solid #ddd;
+}
+.settings-form small {
+  display: block;
+  margin-bottom: 8px;
+  color: #666;
+}
+.settings-form button {
+  padding: 10px 20px;
+  background-color: #d80000;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+.settings-form button:hover {
+  background-color: #d80000;
+}
+
+/* Wiadomości */
+.errors {
+  color: #b20000;
+  background-color: #ffe5e5;
+  border: 1px solid #ffcccc;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 15px;
+}
+.success {
+  color: #006600;
+  background-color: #e6ffea;
+  border: 1px solid #b3ffcc;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 15px;
+}
+
+/* Kontener rezerwacji */
+.my-reservations-container {
+  margin-top: 20px;
+}
+
+/* Nagłówek sekcji rezerwacji */
+.my-reservations-container h3 {
+  font-size: 1.25rem;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+/* Tabela rezerwacji */
+.reservations-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.reservations-table th,
+.reservations-table td {
+  padding: 12px 10px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+.reservations-table th {
+  background-color: #f4f4f4;
+  font-weight: 600;
+  color: #555;
+}
+
+.reservations-table tbody tr:hover {
+  background-color: #fafafa;
+}
+
+/* Ostatni wiersz – usuń dolną linię */
+.reservations-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Przyciski w tabeli */
+.btn-view-details,
+.btn-cancel {
+  display: inline-block;
+  padding: 8px 14px;
+  font-size: 0.9rem;
+  text-decoration: none;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+/* Przyciski „Szczegóły pojazdu” */
+.btn-view-details {
+  background-color: #d80000;
+  color: #fff;
+}
+
+.btn-view-details:hover {
+  opacity: 0.9;
+}
+
+/* Przyciski „Anuluj” */
+.btn-cancel {
+  background-color: #d80000;
+  color: #fff;
+  margin-left: 8px;
+}
+
+.btn-cancel:hover {
+  opacity: 0.9;
+}

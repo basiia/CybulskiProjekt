@@ -1,10 +1,12 @@
 <?php
+// panel_uzytkownika.php
+
 session_start();
 include '../includes/db.php';
 include '../includes/header.php';
 
 if (!isset($_SESSION['id_user'])) {
-    header("Location: login.php");
+    header("Location: ../pages/login.php");
     exit();
 }
 
@@ -97,11 +99,88 @@ if ($page === 'ustawienia_konta' && $_SERVER['REQUEST_METHOD'] === 'POST') {
     </nav>
 
     <div class="panel-content">
+
         <?php if ($page === 'moje_dane'): ?>
             <p><strong>Imię:</strong> <?= htmlspecialchars($userData['imie']) ?></p>
             <p><strong>Nazwisko:</strong> <?= htmlspecialchars($userData['nazwisko']) ?></p>
             <p><strong>Telefon:</strong> <?= htmlspecialchars($userData['telefon']) ?: '-' ?></p>
             <p><strong>Email:</strong> <?= htmlspecialchars($userData['email']) ?></p>
+
+        <?php elseif ($page === 'moje_rezerwacje'): ?>
+            <?php
+            // Pobranie rezerwacji użytkownika
+            $stmt = $pdo->prepare("
+                SELECT 
+                    r.id_rezerwacji, 
+                    r.data_rezerwacji, 
+                    r.status, 
+                    r.wielkosc_zaliczki,
+                    p.id_pojazdu, 
+                    p.marka, 
+                    p.model, 
+                    p.rok_produkcji
+                FROM rezerwacje r
+                JOIN pojazdy p ON r.id_pojazdu = p.id_pojazdu
+                WHERE r.id_user = :id_user
+                ORDER BY r.data_rezerwacji DESC
+            ");
+            $stmt->execute(['id_user' => $_SESSION['id_user']]);
+            $reservations = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            ?>
+
+            <div class="my-reservations-container">
+                <h3>Moje rezerwacje</h3>
+
+                <?php if (empty($reservations)): ?>
+                    <p>Nie masz żadnych rezerwacji.</p>
+                <?php else: ?>
+                    <table class="reservations-table">
+                        <thead>
+                            <tr>
+                                <th>Data rezerwacji</th>
+                                <th>Pojazd</th>
+                                <th>Rok produkcji</th>
+                                <th>Status</th>
+                                <th>Wielkość zaliczki</th>
+                                <th>Akcje</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($reservations as $res): ?>
+                                <tr class="clickable-row" data-href="szczegoly.php?id=<?= (int)$res['id_pojazdu'] ?>">
+                                    <td>
+                                        <?= htmlspecialchars(date('d.m.Y', strtotime($res['data_rezerwacji']))) ?>
+                                    </td>
+                                    <td>
+                                        <?= htmlspecialchars($res['marka'] . ' ' . $res['model']) ?>
+                                    </td>
+                                    <td>
+                                        <?= htmlspecialchars($res['rok_produkcji']) ?>
+                                    </td>
+                                    <td>
+                                        <?= htmlspecialchars($res['status']) ?>
+                                    </td>
+                                    <td>
+                                        <?= number_format($res['wielkosc_zaliczki'], 2, ',', ' ') ?> PLN
+                                    </td>
+                                    <td>
+                                        <?php if ($res['status'] === 'Oczekująca'): ?>
+                                            <form method="post" action="../actions/anuluj_rezerwacje.php" style="display:inline;" onclick="event.stopPropagation();">
+                                                <input type="hidden" name="id_rezerwacji" value="<?= (int)$res['id_rezerwacji'] ?>">
+                                                <button type="submit" class="btn-cancel"
+                                                    onclick="return confirm('Czy na pewno chcesz anulować tę rezerwację?');">
+                                                    Anuluj
+                                                </button>
+                                            </form>
+                                        <?php endif; ?>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+
+                        </tbody>
+                    </table>
+                <?php endif; ?>
+            </div>
 
         <?php elseif ($page === 'ustawienia_konta'): ?>
             <?php if ($errors): ?>
@@ -144,3 +223,16 @@ if ($page === 'ustawienia_konta' && $_SERVER['REQUEST_METHOD'] === 'POST') {
 </main>
 
 <?php include '../includes/footer.php'; ?>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".clickable-row").forEach(function (row) {
+            row.addEventListener("click", function () {
+                const href = this.getAttribute("data-href");
+                if (href) {
+                    window.location.href = href;
+                }
+            });
+        });
+    });
+</script>

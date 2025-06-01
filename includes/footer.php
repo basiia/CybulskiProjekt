@@ -3,7 +3,7 @@
 <footer class="main-footer">
   <div class="footer-container">
     <div class="footer-left">
-      <h3>Nazwa!</h3>
+      <h3>Karpol</h3>
       <p>Adres Warszawa , ul. Warszawska, 1</p>
       <p><img src="../assets/icon-phone.png" class="footer-icon" alt="Telefon">+48 555 555 555</p>
       <p><img src="../assets/icon-mail.png" class="footer-icon" alt="Email">kontakt@example.com</p>
