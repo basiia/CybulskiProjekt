@@ -68,6 +68,10 @@ $stmt_recommended = $pdo->query("SELECT * FROM Pojazdy WHERE status = 'Dostępny
                 <div class="search-bottom">
                     <button type="submit" formaction="search.php">Szukaj</button>
                 </div>
+                <div class="advanced-search">
+                    <img src="../assets/filter-icon.png" alt="Filtr" class="filter-icon">
+                    <a href="search.php">Zaawansowane wyszukiwanie</a>
+                </div>
             </form>
         </div>
         <div class="hero-image">
@@ -88,29 +92,29 @@ $stmt_recommended = $pdo->query("SELECT * FROM Pojazdy WHERE status = 'Dostępny
             </div>
         <?php endwhile; ?>
     </div>
+
     <div class="two-columns">
-    <div class="filters">
-        <h2>Filtruj po lokalizacji</h2>
-        <form method="get" action="search.php" class="location-form">
-            <?php $stmt_locations->execute(); while ($row = $stmt_locations->fetch()): ?>
-                <button type="submit" name="id_lokacji" value="<?= (int)$row['id_lokacji'] ?>" class="location-btn">
-                    <?= htmlspecialchars($row['miasto']) ?>
-                </button>
-            <?php endwhile; ?>
-        </form>
-    </div>
+        <div class="filters">
+            <h2>Filtruj po lokalizacji</h2>
+            <form method="get" action="search.php" class="location-form">
+                <?php $stmt_locations->execute(); while ($row = $stmt_locations->fetch()): ?>
+                    <button type="submit" name="id_lokacji" value="<?= (int)$row['id_lokacji'] ?>" class="location-btn">
+                        <?= htmlspecialchars($row['miasto']) ?>
+                    </button>
+                <?php endwhile; ?>
+            </form>
+        </div>
 
-    <div class="why-us">
-        <h2>Dlaczego my?</h2>
-        <ul>
-            <li>✔ Sprawdzone pojazdy</li>
-            <li>✔ Pełna historia serwisowa</li>
-            <li>✔ Bezpieczne transakcje</li>
-            <li>✔ Szybka obsługa</li>
-        </ul>
+        <div class="why-us">
+            <h2>Dlaczego my?</h2>
+            <ul>
+                <li>✔ Sprawdzone pojazdy</li>
+                <li>✔ Pełna historia serwisowa</li>
+                <li>✔ Bezpieczne transakcje</li>
+                <li>✔ Szybka obsługa</li>
+            </ul>
+        </div>
     </div>
-    </div>
-
 
     <?php if ($opinia): ?>
     <div class="testimonial-contact-container">
@@ -180,6 +184,5 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
     }
 });
 </script>
-
 
 <?php include '../includes/footer.php'; ?>

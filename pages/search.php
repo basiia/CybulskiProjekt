@@ -2,7 +2,6 @@
 include '../includes/db.php';
 include '../includes/header.php';
 
-// Uzyskiwanie unikalnych wartości dla filtrów
 function getDistinct(PDO $pdo, string $column) {
     $stmt = $pdo->prepare("SELECT DISTINCT $column FROM Pojazdy WHERE $column IS NOT NULL AND $column != '' ORDER BY $column");
     $stmt->execute();
@@ -14,31 +13,39 @@ $roczniki = getDistinct($pdo, 'rok_produkcji');
 $paliwa   = getDistinct($pdo, 'rodzaj_paliwa');
 $lokacje  = $pdo->query("SELECT id_lokacji, miasto FROM Lokacje ORDER BY miasto")->fetchAll(PDO::FETCH_ASSOC);
 
-// Wartości z GET
 $marka      = $_GET['marka'] ?? '';
 $model      = $_GET['model'] ?? '';
 $rocznik_od = $_GET['rocznik_od'] ?? '';
 $rocznik_do = $_GET['rocznik_do'] ?? '';
 $paliwo     = $_GET['paliwo'] ?? '';
 $lokacja    = $_GET['id_lokacji'] ?? '';
+$page       = max(1, (int)($_GET['page'] ?? 1));
+$limit      = 9;
+$offset     = ($page - 1) * $limit;
 
 $where = ["status = 'Dostępny'"];
 $params = [];
 
-if ($marka) { $where[] = "marka = :marka"; $params[':marka'] = $marka; }
-if ($model) { $where[] = "model = :model"; $params[':model'] = $model; }
+if ($marka)      { $where[] = "marka = :marka"; $params[':marka'] = $marka; }
+if ($model)      { $where[] = "model = :model"; $params[':model'] = $model; }
 if ($rocznik_od) { $where[] = "rok_produkcji >= :rocznik_od"; $params[':rocznik_od'] = $rocznik_od; }
 if ($rocznik_do) { $where[] = "rok_produkcji <= :rocznik_do"; $params[':rocznik_do'] = $rocznik_do; }
-if ($paliwo) { $where[] = "rodzaj_paliwa = :paliwo"; $params[':paliwo'] = $paliwo; }
-if ($lokacja) { $where[] = "id_lokacji = :lokacja"; $params[':lokacja'] = $lokacja; }
+if ($paliwo)     { $where[] = "rodzaj_paliwa = :paliwo"; $params[':paliwo'] = $paliwo; }
+if ($lokacja)    { $where[] = "id_lokacji = :lokacja"; $params[':lokacja'] = $lokacja; }
 
 $where_sql = implode(' AND ', $where);
-$sql = "SELECT * FROM Pojazdy WHERE $where_sql ORDER BY cena ASC LIMIT 30";
+$count_sql = "SELECT COUNT(*) FROM Pojazdy WHERE $where_sql";
+$stmt = $pdo->prepare($count_sql);
+foreach ($params as $k => $v) $stmt->bindValue($k, $v);
+$stmt->execute();
+$total_rows = $stmt->fetchColumn();
+$total_pages = ceil($total_rows / $limit);
 
+$sql = "SELECT * FROM Pojazdy WHERE $where_sql ORDER BY cena ASC LIMIT :limit OFFSET :offset";
 $stmt = $pdo->prepare($sql);
-foreach ($params as $k => $v) {
-    $stmt->bindValue($k, $v);
-}
+foreach ($params as $k => $v) $stmt->bindValue($k, $v);
+$stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+$stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
 $stmt->execute();
 $auta = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
@@ -56,7 +63,6 @@ $auta = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         <select name="model" id="model">
             <option value="">-- Wybierz model --</option>
-            <!-- Załadowano przez JS -->
         </select>
 
         <select name="rocznik_od">
@@ -111,6 +117,17 @@ $auta = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <p class="no-results">Brak wyników pasujących do wyszukiwania.</p>
     <?php endif; ?>
 </section>
+
+<?php if ($total_pages > 1): ?>
+<div class="pagination">
+    <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+        <a href="?<?= http_build_query(array_merge($_GET, ['page' => $i])) ?>"
+           class="<?= $i === $page ? 'active' : '' ?>">
+            <?= $i ?>
+        </a>
+    <?php endfor; ?>
+</div>
+<?php endif; ?>
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {

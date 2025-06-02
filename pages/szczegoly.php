@@ -125,5 +125,40 @@ $status_klasa = $status_klasy[$pojazd['status']] ?? 'status-inny';
         <p class="vehicle-unavailable">Pojazd jest aktualnie zarezerwowany.</p>
     <?php endif; ?>
 </div>
+<?php
+// Pobierz losowe auta z tej samej lokalizacji, z wyłączeniem bieżącego
+$stmt_polecane = $pdo->prepare("
+    SELECT * FROM Pojazdy 
+    WHERE status = 'Dostępny' 
+      AND id_pojazdu != :id 
+      AND id_lokacji = :lokacja
+    ORDER BY RAND()
+    LIMIT 3
+");
+$stmt_polecane->execute([
+    ':id' => $pojazd['id_pojazdu'],
+    ':lokacja' => $pojazd['id_lokacji']
+]);
+$polecane = $stmt_polecane->fetchAll(PDO::FETCH_ASSOC);
+?>
+
+<?php if ($polecane): ?>
+    <div class="recommended-section">
+        <h2>Polecane samochody</h2>
+        <div class="car-grid">
+            <?php foreach ($polecane as $auto): ?>
+                <div class="car-card">
+                    <img src="../assets/car_place.png" alt="<?= htmlspecialchars($auto['model']) ?>">
+                    <h3><?= htmlspecialchars($auto['marka'] . ' ' . $auto['model']) ?></h3>
+                    <p class="price"><?= number_format($auto['cena'], 0, ',', ' ') ?> zł</p>
+                    <p><?= number_format($auto['przebieg'], 0, ',', ' ') ?> km</p>
+                    <p><?= htmlspecialchars($auto['rodzaj_paliwa']) ?></p>
+                    <a href="szczegoly.php?id=<?= $auto['id_pojazdu'] ?>" class="btn">Zobacz więcej</a>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    </div>
+<?php endif; ?>
+
 
 <?php include '../includes/footer.php'; ?>
